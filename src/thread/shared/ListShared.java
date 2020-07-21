@@ -4,6 +4,9 @@ import java.util.LinkedList;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
+
+import thread.Lock.LinkedLock;
 
 public class ListShared {
 	
@@ -11,6 +14,7 @@ public class ListShared {
 	private LinkedList<Integer> buffer;
 	// Lock e suas variaveis de condição
 	private Lock lock;
+	private LinkedLock lockLinked;
 	private Condition isRemove;
 	private Condition isInsert;
 	private Condition isSearch;
@@ -18,7 +22,10 @@ public class ListShared {
 	// Inicialização das variaveis no construtor
 	public ListShared() {
 		this.buffer = new LinkedList<Integer>();
+		
 		this.lock = new ReentrantLock(true);
+		this.lockLinked = new LinkedLock();
+
 		this.isRemove = lock.newCondition();
 		this.isInsert = lock.newCondition();
 		this.isSearch = lock.newCondition();
@@ -29,6 +36,14 @@ public class ListShared {
 	public void insertItem(Integer value) {
 		// Bloqueio da seção critica 
 		lock.lock();
+
+		try {
+			lockLinked.lockInsert();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 		System.out.printf("--> Iniciar inserção de elemento... \n", value);
 		System.out.printf("\t Inserir elemento %d na lista... \n", value);
 		// Inserção do valor na ultima posição da lista
@@ -43,18 +58,28 @@ public class ListShared {
 		
 		// Desbloqueio da seção critica
 		lock.unlock();
+		lockLinked.unlockInsert();
 
 	}
 
 	// Metodo para a remoção dos itens
 	public void removeItem(int index) {
+		
 		// Bloqueio da seção critica
-		lock.lock();
+		lock.lock(); 
+		
+		try {
+			lockLinked.lockRemove();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+			
 		try {
 			System.out.printf("--> Iniciar remoção da lista... \n", index);
 			// Verificação de existencia de elementos na lista
 			while (buffer.size() == 0) {
-				System.out.println("\t A lista está vázia!");
+				System.out.println("\t A lista está vazia!");
 				System.out.println("\t Indo dormir...");
 				// Colocando a thread para a espera
 				isRemove.await();
@@ -74,26 +99,34 @@ public class ListShared {
 			}
 			
 			// Impressão da lista
-			showBuffer();
-			
-			// Sinalização para as threads de pesquisa e inserção
-			isSearch.signal();
-			isInsert.signal();
+			showBuffer();	
 			
 		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
+			
 			// Desbloqueio da seção critica
+			try {
+				lockLinked.unlockRemove();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			lock.unlock();
 		}
-
+			
 	}
 
 	public void searchItem (Integer item) {
 		//Bloqueio da seção critica
-		lock.lock();
-		// Sinalização para as threads de inserção
-		isInsert.signal();
+		try {
+			lockLinked.lockSearch();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+			
 		System.out.println("--> Iniciar busca de elemento...");
 		System.out.printf("\t Buscando pelo elemento %d na lista... \n", item);
 		// Verificação da existência do elemento na lista
@@ -102,15 +135,9 @@ public class ListShared {
 		} else {
 			System.out.printf("\t Elemento %d: não encontrado! \n", item);
 		}
-		
 
-		
-		// Sinalização para as outras threads de remoção
-		isRemove.signal();
-		
 		// Desbloqueio da seção critica
-		lock.unlock();
-
+		lockLinked.unlockSearch();
 	}
 	
 	// Metódo para a impressão da lista
@@ -118,6 +145,6 @@ public class ListShared {
 		for (int i = 0; i < buffer.size(); i++) {
 			System.out.printf("[ %d ]", buffer.get(i));
 		}
-		System.out.println();
+		System.out.println("\n");
 	}
 }
