@@ -25,14 +25,15 @@ public class ListShared {
 	public void insertItem(Integer value) {
 		lock.lock();
 
-		System.out.printf("Inserir elemento %d na lista... \n", value);
+		System.out.printf("--> Iniciar inserção de elemento... \n", value);
+		System.out.printf("\t Inserir elemento %d na lista... \n", value);
 		buffer.addLast(value);
-		System.out.printf("Elemento %d inserido! \n", value);
+		System.out.printf("\t Elemento %d inserido! \n", value);
 
-		System.out.println("Acordar as threads de remoção e inserção");
+		System.out.println("\t Acordar as threads de remoção e inserção");
 		isRemove.signal();
 		isInsert.signal();
-
+		System.out.println("------------------------------------------");
 		lock.unlock();
 
 
@@ -40,25 +41,28 @@ public class ListShared {
 
 	public void removeItem(int index) {
 		lock.lock();
-		System.out.printf("Remover elemento da posição %d da lista \n", index);
 		try {
-			while (this.buffer.size() == 0) {
-				System.out.println("A lista está vázia");
-				System.out.println("Indo dormir...");
+			System.out.printf("--> Iniciar remoção da lista... \n", index);
+			while (buffer.size() == 0) {
+				System.out.println("\t A lista está vázia");
+				System.out.println("\t Indo dormir...");
 				isRemove.await();
 			}
 
+			index = index % buffer.size();
+			System.out.printf("\t Remover elemento da posição %d da lista... \n", index);
+
 			Integer valueRemoved = buffer.remove(index); 
 			if ( valueRemoved != null) {
-				System.out.printf("Elemento %d foi removido \n", valueRemoved);
+				System.out.printf("\t Elemento %d foi removido \n", valueRemoved);
 			} else {
-				System.out.println("Não foi possível remover o elemento dessa posição");
+				System.out.println("\t Não foi possível remover o elemento dessa posição");
 			}
 
-			System.out.println("Acordar as threads de busca, inserção e remoção");
+			System.out.println("\t Acordar as threads de busca, inserção e remoção");
 			isSearch.signal();
 			isInsert.signal();
-			isRemove.signal();
+			System.out.println("---------------------------------------------");
 
 		} catch (InterruptedException e) {
 			e.printStackTrace();
@@ -66,18 +70,17 @@ public class ListShared {
 			lock.unlock();
 		}
 
-
-		// TODO Metodo de remoção com o bloqueio
-
 	}
 
 	public void searchItem (Integer item) {
-		System.out.printf("Buscando pelo elemento %d na lista ... \n", item);
+		System.out.println("--> Iniciar busca de elemento...");
+		System.out.printf("\t Buscando pelo elemento %d na lista... \n", item);
 		if (buffer.contains(item)) {
-			System.out.printf("Elemento %d: encontrado! \n", item);
+			System.out.printf("\t Elemento %d: encontrado! \n", item);
 		} else {
-			System.out.printf("Elemento %d: não encontrado \n", item);
+			System.out.printf("\t Elemento %d: não encontrado \n", item);
 		}
+		System.out.println("--------------------------------------------");
 	}
 
 	public int sizeBuffer() {
