@@ -13,6 +13,10 @@ public class RemoveList extends Thread {
 	
 	@Override
 	public void run() {
-		list.removeItem();
+		Integer value = 1;
+		if (this.list.sizeBuffer() > 0) {
+		 value = (int) (Math.random() * 100) % this.list.sizeBuffer();
+		}
+		list.removeItem(value);
 	}
 }

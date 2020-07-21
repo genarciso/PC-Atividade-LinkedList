@@ -13,6 +13,7 @@ public class SearchList extends Thread {
 	
 	@Override
 	public void run() {
-		this.list.searchItem();
+		Integer value = (int) (Math.random() * 100);
+		this.list.searchItem(value);
 	}
 }

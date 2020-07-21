@@ -13,6 +13,7 @@ public class InsertList extends Thread {
 	
 	@Override
 	public void run() {
-		this.list.insertItem();
+		Integer value = (int) (Math.random() * 100);
+		this.list.insertItem(value);
 	}
 }
