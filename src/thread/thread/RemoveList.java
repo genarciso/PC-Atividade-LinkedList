@@ -11,9 +11,10 @@ public class RemoveList extends Thread {
 		
 	}
 	
+	//	Metodo que escolhe um indece qualquer de 0 a 10 que será removido da lista
 	@Override
 	public void run() {
-		int value = (int) (Math.random() * 100);
+		int value = (int) (Math.random() * 10);
 		list.removeItem(value);
 	}
 }

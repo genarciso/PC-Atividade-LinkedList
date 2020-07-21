@@ -11,6 +11,7 @@ public class InsertList extends Thread {
 		
 	}
 	
+	// Metodo que escolhe um numero qualquer de 0 a 100 e insere na lista
 	@Override
 	public void run() {
 		Integer value = (int) (Math.random() * 100);
