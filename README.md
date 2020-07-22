@@ -7,7 +7,7 @@
 ___
 ## Objetivos:
 
-* Implementar uma versão concorrente para as operações básicas de ser realizada em uma lista encadeada, que foram as operações de inserção, remoção e busca.
+* Implementar uma versão concorrente para as operações básicas de ser realizada em uma lista encadeada, as quais foram as operações de inserção, remoção e busca.
 ___
 ## Descrição do problema:
 
@@ -23,10 +23,9 @@ Threads do tipo B meramente realizam operações de leitura sobre a lista e, por
 ___
 ## Metodologia:
 
-Foram utilizados a linguagem Java e mecanismos de sincronização de threads, locks e monitores, com a junção de variáveis de condição para chegar uma solução ideal para o problema, no qual é garantido a exclusão mutua entre as regras dadas pelo problema.
+Foram utilizados a linguagem Java e mecanismos de sincronização de threads, locks e monitores, com a junção de variáveis de condição para chegar uma solução ideal para o problema, no qual deve ser garantido a exclusão mutua dadas as regras do problema.
 ___
 ## Execução:
-
 
 O programa pode ser executado por meio de uma IDE, como o Eclipse, no qual deve ser importado o projeto e através da IDE utilizada rodar a classe Main.java. Caso deseja rodar por linha de comando, desloque-se dentro da pasta onde localiza-se o Main do projeto (src/main), la pode ser executado o comando 
 
