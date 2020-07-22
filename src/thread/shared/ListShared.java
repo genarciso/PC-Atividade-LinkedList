@@ -4,7 +4,6 @@ import java.util.LinkedList;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import thread.lock.LinkedLock;
 
@@ -16,8 +15,6 @@ public class ListShared {
 	private Lock lock;
 	private LinkedLock lockLinked;
 	private Condition isRemove;
-	private Condition isInsert;
-	private Condition isSearch;
 
 	// Inicialização das variaveis no construtor
 	public ListShared() {
@@ -27,8 +24,6 @@ public class ListShared {
 		this.lockLinked = new LinkedLock();
 
 		this.isRemove = lock.newCondition();
-		this.isInsert = lock.newCondition();
-		this.isSearch = lock.newCondition();
 
 	}
 
