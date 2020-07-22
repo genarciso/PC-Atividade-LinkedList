@@ -6,7 +6,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-import thread.Lock.LinkedLock;
+import thread.lock.LinkedLock;
 
 public class ListShared {
 	
@@ -40,7 +40,6 @@ public class ListShared {
 		try {
 			lockLinked.lockInsert();
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -71,7 +70,6 @@ public class ListShared {
 		try {
 			lockLinked.lockRemove();
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 			
@@ -102,7 +100,6 @@ public class ListShared {
 			showBuffer();	
 			
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
 			
@@ -110,7 +107,6 @@ public class ListShared {
 			try {
 				lockLinked.unlockRemove();
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			lock.unlock();
@@ -123,7 +119,6 @@ public class ListShared {
 		try {
 			lockLinked.lockSearch();
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 			
