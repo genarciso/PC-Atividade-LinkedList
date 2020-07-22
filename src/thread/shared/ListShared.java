@@ -14,7 +14,7 @@ public class ListShared {
 	// Lock e suas variaveis de condição
 	private Lock lock;
 	private LinkedLock lockLinked;
-	private Condition isRemove;
+	private Condition isEmpty;
 
 	// Inicialização das variaveis no construtor
 	public ListShared() {
@@ -23,7 +23,7 @@ public class ListShared {
 		this.lock = new ReentrantLock(true);
 		this.lockLinked = new LinkedLock();
 
-		this.isRemove = lock.newCondition();
+		this.isEmpty = lock.newCondition();
 
 	}
 
@@ -48,7 +48,7 @@ public class ListShared {
 		showBuffer();
 		
 		// Sinalização das threads de remoção
-		isRemove.signal();
+		isEmpty.signal();
 		
 		// Desbloqueio da seção critica
 		lock.unlock();
@@ -75,7 +75,7 @@ public class ListShared {
 				System.out.println("\t A lista está vazia!");
 				System.out.println("\t Indo dormir...");
 				// Colocando a thread para a espera
-				isRemove.await();
+				isEmpty.await();
 			}
 			
 			// Pegar um index válido para o indice da lista
